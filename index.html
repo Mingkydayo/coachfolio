@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a09" />
+  <meta name="description" content="PT 트레이너를 위한 회원 운동기록·수행분석·회원리포트 시스템 COACHFOLIO. 가입 즉시 첫 한 달 무료로 시작하세요." />
+  <meta property="og:title" content="COACHFOLIO — 트레이너의 수업을 기록으로" />
+  <meta property="og:description" content="수업 중 5초 기록부터 수행 분석과 회원 리포트까지. 첫 한 달 무료." />
+  <meta property="og:image" content="assets/social-01.png" />
+  <title>COACHFOLIO — 첫 한 달 무료</title>
+  <style>
+    :root {
+      --ink: #0a0a09;
+      --graphite: #151512;
+      --panel: #20201c;
+      --line: rgba(243, 238, 225, .14);
+      --ivory: #f3eee2;
+      --ivory-2: #d4ccbd;
+      --brass: #b79b62;
+      --brass-2: #e0c77e;
+      --green: #a9b8ad;
+      --paper: #f1eadb;
+      --paper-ink: #181713;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--ink); }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ivory);
+      background: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      word-break: keep-all;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .scroll-progress {
+      position: fixed;
+      z-index: 100;
+      inset: 0 0 auto;
+      height: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: linear-gradient(90deg, var(--brass), var(--brass-2));
+    }
+
+    .nav {
+      position: sticky;
+      z-index: 90;
+      top: 0;
+      height: 66px;
+      border-bottom: 1px solid transparent;
+      background: rgba(10, 10, 9, .68);
+      backdrop-filter: saturate(160%) blur(18px);
+      transition: border-color .3s, background .3s;
+    }
+    .nav.scrolled { border-color: var(--line); background: rgba(10, 10, 9, .9); }
+    .nav-inner {
+      width: min(calc(100% - 36px), var(--max));
+      height: 100%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; margin-right: auto; }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(224, 199, 126, .55);
+      color: var(--brass-2);
+      font: 700 13px/1 Georgia, serif;
+    }
+    .brand-name { font: 700 21px/1 Georgia, serif; letter-spacing: .09em; }
+    .nav-links { display: flex; align-items: center; gap: 27px; color: #c7c0b3; font-size: 13px; font-weight: 700; }
+    .nav-links a { transition: color .2s; }
+    .nav-links a:hover { color: white; }
+    .nav-cta, .button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      border: 1px solid var(--brass-2);
+      border-radius: 999px;
+      color: #181611;
+      background: var(--brass-2);
+      font-size: 14px;
+      font-weight: 900;
+      box-shadow: 0 12px 30px rgba(196, 162, 84, .16);
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .nav-cta:hover, .button:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(196, 162, 84, .26); }
+    .button.secondary { color: var(--ivory); background: transparent; border-color: rgba(243, 238, 225, .3); box-shadow: none; }
+
+    .wrap { width: min(calc(100% - 44px), var(--max)); margin: 0 auto; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      color: var(--brass-2);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 34px; height: 1px; background: currentColor; }
+    .display {
+      margin: 0;
+      font-size: clamp(54px, 8.6vw, 132px);
+      font-weight: 950;
+      line-height: .96;
+      letter-spacing: -.072em;
+    }
+    .gradient-text {
+      color: transparent;
+      background: linear-gradient(105deg, #f1dfad 5%, #b58b3b 48%, #f3e4bc 92%);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+    .lead { margin: 0; color: #aaa396; font-size: clamp(19px, 2.1vw, 29px); font-weight: 650; line-height: 1.58; }
+
+    .hero {
+      position: relative;
+      min-height: 1260px;
+      padding: 104px 0 120px;
+      overflow: clip;
+      background:
+        radial-gradient(circle at 72% 42%, rgba(183, 155, 98, .2), transparent 27%),
+        radial-gradient(circle at 10% 12%, rgba(255, 255, 255, .045), transparent 24%),
+        linear-gradient(180deg, #0a0a09 0%, #11110f 72%, #0a0a09 100%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 1300px;
+      height: 500px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(183,155,98,.14), transparent 66%);
+      pointer-events: none;
+    }
+    .hero-copy { position: relative; z-index: 4; }
+    .hero .eyebrow { margin-bottom: 35px; }
+    .hero .display { max-width: 1080px; }
+    .hero .lead { max-width: 690px; margin-top: 42px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .trial-mini { margin-top: 17px; color: #777269; font-size: 13px; font-weight: 700; }
+
+    .hero-visual {
+      position: relative;
+      z-index: 3;
+      width: min(950px, 88vw);
+      height: 660px;
+      margin: 55px auto 0;
+      perspective: 1300px;
+    }
+    .hero-device {
+      position: absolute;
+      width: 405px;
+      left: 50%;
+      top: 0;
+      padding: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(224, 199, 126, .34);
+      border-radius: 40px;
+      background: linear-gradient(145deg, #665a40, #131411 18%, #26251f);
+      box-shadow: 0 60px 120px rgba(0,0,0,.66), 0 0 70px rgba(183,155,98,.1);
+      transform: translateX(-50%) rotateX(3deg);
+    }
+    .hero-device img { width: 100%; border-radius: 31px; }
+    .float-card {
+      position: absolute;
+      width: 270px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(28, 28, 24, .82);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 25px 70px rgba(0,0,0,.38);
+      opacity: 0;
+      filter: blur(9px);
+      will-change: transform, opacity, filter;
+      transition:
+        transform .9s cubic-bezier(.18,.8,.18,1),
+        opacity .65s ease,
+        filter .7s ease;
+    }
+    .float-card::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 0;
+      height: 1px;
+      opacity: 0;
+      background: linear-gradient(90deg, rgba(224,199,126,.12), rgba(224,199,126,.7));
+      transition: width .55s ease, opacity .45s ease;
+    }
+    .float-card.left::after { right: -50px; }
+    .float-card.right::after { left: -50px; transform: rotate(180deg); }
+    .float-card b,
+    .float-card span,
+    .float-card i {
+      opacity: 0;
+      transform: translateY(11px);
+      transition: opacity .48s ease, transform .56s cubic-bezier(.2,.75,.2,1);
+    }
+    .float-card b { display: block; color: var(--ivory); font-size: 28px; line-height: 1.15; }
+    .float-card span { display: block; margin-top: 10px; color: #999286; font-size: 13px; font-weight: 700; line-height: 1.5; }
+    .float-card i { display: block; margin-bottom: 14px; color: var(--brass-2); font-size: 11px; font-style: normal; font-weight: 900; letter-spacing: .13em; }
+    .float-card.left {
+      left: 0;
+      top: 130px;
+      transform: translate(155px, 34px) scale(.78) rotate(-1deg);
+      transform-origin: right center;
+    }
+    .float-card.right {
+      right: 0;
+      top: 275px;
+      transform: translate(-155px, 34px) scale(.78) rotate(1deg);
+      transform-origin: left center;
+    }
+    .hero-visual.wings-open .float-card { opacity: 1; filter: blur(0); }
+    .hero-visual.wings-open .float-card.left { transform: translate(0, 0) scale(1) rotate(-4deg); transition-delay: .08s; }
+    .hero-visual.wings-open .float-card.right { transform: translate(0, 0) scale(1) rotate(4deg); transition-delay: .48s; }
+    .hero-visual.wings-open .float-card::after { width: 48px; opacity: 1; }
+    .hero-visual.wings-open .float-card.left::after { transition-delay: .36s; }
+    .hero-visual.wings-open .float-card.right::after { transition-delay: .76s; }
+    .hero-visual.wings-open .float-card i,
+    .hero-visual.wings-open .float-card b,
+    .hero-visual.wings-open .float-card span { opacity: 1; transform: none; }
+    .hero-visual.wings-open .float-card.left i { transition-delay: .3s; }
+    .hero-visual.wings-open .float-card.left b { transition-delay: .4s; }
+    .hero-visual.wings-open .float-card.left span { transition-delay: .5s; }
+    .hero-visual.wings-open .float-card.right i { transition-delay: .7s; }
+    .hero-visual.wings-open .float-card.right b { transition-delay: .8s; }
+    .hero-visual.wings-open .float-card.right span { transition-delay: .9s; }
+
+    .section { position: relative; padding: 150px 0; overflow: clip; }
+    .color-bridge {
+      position: relative;
+      z-index: 2;
+      height: clamp(120px, 16vw, 230px);
+      margin: -1px 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .color-bridge::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .3;
+      background-image: radial-gradient(rgba(224,199,126,.16) .65px, transparent .75px);
+      background-size: 5px 5px;
+      mask-image: linear-gradient(180deg, transparent, #000 34%, #000 66%, transparent);
+      -webkit-mask-image: linear-gradient(180deg, transparent, #000 34%, #000 66%, transparent);
+    }
+    .bridge-dark-deep {
+      height: clamp(90px, 10vw, 150px);
+      background:
+        radial-gradient(ellipse at 72% 30%, rgba(183,155,98,.08), transparent 55%),
+        linear-gradient(180deg, #0d0d0c 0%, #10100e 48%, #151510 100%);
+    }
+    .bridge-dark-paper {
+      height: clamp(210px, 23vw, 340px);
+      background:
+        radial-gradient(ellipse at 66% 32%, rgba(202,175,112,.19), transparent 48%),
+        linear-gradient(180deg,
+          #080908 0%,
+          #0d0e0c 15%,
+          #25231e 37%,
+          #655c4c 59%,
+          #b3a894 79%,
+          #ded5c5 92%,
+          var(--paper) 100%);
+    }
+    .bridge-paper-light {
+      height: clamp(90px, 10vw, 145px);
+      background:
+        radial-gradient(ellipse at 35% 45%, rgba(183,155,98,.09), transparent 58%),
+        linear-gradient(180deg, var(--paper) 0%, #f3eddf 48%, #f7f6f2 100%);
+    }
+    .bridge-light-dark {
+      height: clamp(230px, 25vw, 360px);
+      background:
+        radial-gradient(ellipse at 35% 42%, rgba(183,155,98,.14), transparent 50%),
+        linear-gradient(180deg,
+          #f7f6f2 0%,
+          #eee9de 18%,
+          #c7beae 38%,
+          #81796c 57%,
+          #3b3933 75%,
+          #171612 90%,
+          #0a0a09 100%);
+    }
+    .section-head { max-width: 900px; margin-bottom: 74px; }
+    .section-head .eyebrow { margin-bottom: 27px; }
+    .section-title { margin: 0; font-size: clamp(45px, 6.2vw, 88px); font-weight: 950; line-height: 1.04; letter-spacing: -.06em; }
+    .section-desc { max-width: 720px; margin: 30px 0 0; color: #9e978b; font-size: clamp(18px, 2vw, 25px); font-weight: 650; line-height: 1.6; }
+
+    .modes { background: #0d0d0c; }
+    .mode-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 34px; }
+    .mode-card { min-width: 0; }
+    .mode-label { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 22px; }
+    .mode-label small { display: block; color: var(--brass); font-size: 11px; font-weight: 900; letter-spacing: .13em; }
+    .mode-label h3 { margin: 8px 0 0; font-size: clamp(30px, 3.4vw, 48px); line-height: 1; letter-spacing: -.04em; }
+    .badge { flex: 0 0 auto; padding: 10px 14px; border: 1px solid rgba(224,199,126,.4); border-radius: 999px; color: var(--brass-2); font-size: 14px; font-weight: 900; }
+    .badge.filled { color: #191711; border-color: var(--brass-2); background: var(--brass-2); }
+    .screen {
+      position: relative;
+      height: min(860px, 76vw);
+      min-height: 620px;
+      padding: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(224, 199, 126, .3);
+      border-radius: 38px;
+      background: linear-gradient(145deg, #4d4535, #11120f 25%, #313129);
+      box-shadow: 0 44px 90px rgba(0,0,0,.52);
+    }
+    .screen img { width: 100%; height: 100%; object-fit: cover; object-position: top center; border-radius: 29px; }
+    .mode-card:last-child .screen img { object-position: left top; }
+    .mode-note { max-width: 470px; margin-top: 24px; color: #918a7f; font-size: 16px; font-weight: 650; line-height: 1.65; }
+
+    .analysis {
+      min-height: 1160px;
+      background:
+        radial-gradient(circle at 72% 42%, rgba(182, 149, 78, .22), transparent 25%),
+        linear-gradient(145deg, #161611, #080908 64%);
+    }
+    .analysis-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 80px; align-items: center; }
+    .analysis-copy { position: sticky; top: 120px; align-self: start; padding-top: 45px; }
+    .analysis-copy .eyebrow { margin-bottom: 28px; }
+    .analysis-copy .section-title { font-size: clamp(48px, 5.3vw, 82px); }
+    .metric-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 42px; }
+    .metric { padding: 23px 20px; border-top: 1px solid rgba(224,199,126,.3); }
+    .metric b { display: block; color: var(--brass-2); font-size: 31px; }
+    .metric span { display: block; margin-top: 7px; color: #898378; font-size: 13px; font-weight: 800; }
+    .analysis-screen { padding: 12px; border: 1px solid rgba(224,199,126,.28); border-radius: 40px; background: #2b2922; box-shadow: 0 70px 140px rgba(0,0,0,.58); }
+    .analysis-screen img { width: 100%; border-radius: 30px; }
+
+    .report { color: var(--paper-ink); background: var(--paper); }
+    .report::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .38;
+      background-image: radial-gradient(rgba(90,67,30,.12) .7px, transparent .8px);
+      background-size: 5px 5px;
+      pointer-events: none;
+    }
+    .report .eyebrow { color: #8e6c31; }
+    .report .section-desc { color: #70685c; }
+    .report-layout { position: relative; display: grid; grid-template-columns: .86fr 1.14fr; gap: 75px; align-items: center; }
+    .report-list { margin-top: 50px; border-top: 1px solid rgba(44,36,24,.18); }
+    .report-item { display: grid; grid-template-columns: 48px 1fr; gap: 20px; padding: 25px 0; border-bottom: 1px solid rgba(44,36,24,.18); }
+    .report-item i { color: #9a7434; font: 700 21px/1 Georgia,serif; }
+    .report-item b { display: block; font-size: 24px; }
+    .report-item span { display: block; margin-top: 7px; color: #776e60; font-size: 15px; font-weight: 650; }
+    .paper-device { position: relative; padding: 12px; border-radius: 34px; background: #c7aa69; box-shadow: 0 50px 95px rgba(60,44,21,.3); transform: rotate(1.8deg); }
+    .paper-device img { width: 100%; max-height: 920px; object-fit: cover; object-position: top; border-radius: 23px; }
+    .custom-label { position: absolute; top: 37px; left: 39px; padding: 10px 14px; border: 1px solid rgba(145,104,40,.45); border-radius: 8px; color: #8c682e; background: rgba(252,249,241,.97); font-size: 16px; font-weight: 950; box-shadow: 0 6px 14px rgba(91,69,34,.14); }
+
+    .highlights { background: #f7f6f2; color: #111; }
+    .highlights .eyebrow { color: #7f6535; }
+    .highlights .section-head { margin-bottom: 48px; }
+    .highlight-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 18px; }
+    .highlight-card { position: relative; min-height: 540px; padding: 44px; overflow: hidden; border-radius: 30px; background: #111; color: white; }
+    .highlight-card.small { background: #dfc77f; color: #171510; }
+    .highlight-card h3 { position: relative; z-index: 2; max-width: 520px; margin: 0; font-size: clamp(34px, 4vw, 58px); line-height: 1.04; letter-spacing: -.05em; }
+    .highlight-card p { position: relative; z-index: 2; max-width: 420px; margin: 21px 0 0; color: #aaa396; font-size: 17px; font-weight: 650; line-height: 1.6; }
+    .highlight-card.small p { color: #62543a; }
+    .highlight-card img { position: absolute; right: -15px; bottom: -235px; width: 420px; border: 1px solid rgba(255,255,255,.15); border-radius: 30px; transform: rotate(-4deg); box-shadow: 0 35px 70px rgba(0,0,0,.4); }
+    .highlight-card .big-number { position: absolute; right: 28px; bottom: -35px; color: rgba(31,25,15,.16); font-size: 260px; font-weight: 950; line-height: 1; letter-spacing: -.1em; }
+
+    .trial {
+      min-height: 900px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(183,155,98,.2), transparent 30%),
+        linear-gradient(180deg, #0a0a09, #14130f);
+    }
+    .trial-inner { width: min(calc(100% - 44px), 980px); margin: auto; }
+    .trial-kicker { color: var(--brass-2); font-size: 13px; font-weight: 900; letter-spacing: .18em; }
+    .trial h2 { margin: 28px 0 0; font-size: clamp(56px, 9vw, 126px); line-height: .94; letter-spacing: -.075em; }
+    .trial h2 span { color: var(--brass-2); }
+    .trial p { max-width: 650px; margin: 34px auto 0; color: #a39b8e; font-size: clamp(18px, 2vw, 25px); font-weight: 650; line-height: 1.62; }
+    .trial-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 55px; text-align: left; }
+    .trial-step { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.025); }
+    .trial-step i { color: var(--brass-2); font: 700 18px/1 Georgia,serif; }
+    .trial-step b { display: block; margin-top: 18px; font-size: 18px; }
+    .trial-step span { display: block; margin-top: 8px; color: #827c72; font-size: 13px; font-weight: 650; line-height: 1.5; }
+    .trial-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+    .trial .button { min-height: 54px; padding: 0 28px; font-size: 16px; }
+    .fine { margin-top: 20px; color: #6f695f; font-size: 12px; font-weight: 700; }
+
+    footer { padding: 38px 0 calc(38px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: #0a0a09; }
+    .footer-inner { display: flex; align-items: center; gap: 24px; color: #777167; font-size: 12px; font-weight: 700; }
+    .footer-brand { margin-right: auto; color: #d8d0c2; font: 700 16px/1 Georgia,serif; letter-spacing: .09em; }
+
+    .reveal { opacity: 0; transform: translateY(44px); transition: opacity .85s ease, transform .85s cubic-bezier(.2,.75,.2,1); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .nav-inner { width: min(calc(100% - 26px), var(--max)); }
+      .brand-name { font-size: 17px; }
+      .nav-cta { min-height: 38px; padding: 0 15px; font-size: 12px; }
+      .wrap { width: min(calc(100% - 32px), var(--max)); }
+      .hero { min-height: 1080px; padding-top: 76px; }
+      .hero .display { font-size: clamp(51px, 15vw, 92px); }
+      .hero-visual { height: 610px; width: 100%; }
+      .hero-device { width: min(350px, 78vw); }
+      .float-card { width: 205px; padding: 17px; }
+      .float-card b { font-size: 21px; }
+      .float-card.left { left: -44px; top: 285px; }
+      .float-card.right { right: -46px; top: 410px; }
+      .section { padding: 105px 0; }
+      .section-head { margin-bottom: 52px; }
+      .mode-grid, .analysis-layout, .report-layout { grid-template-columns: 1fr; }
+      .mode-grid { gap: 74px; }
+      .screen { height: 760px; min-height: 0; }
+      .analysis-layout { gap: 55px; }
+      .analysis-copy { position: static; padding-top: 0; }
+      .report-layout { gap: 55px; }
+      .paper-device { max-width: 590px; margin: auto; }
+      .highlight-grid { grid-template-columns: 1fr; }
+      .highlight-card { min-height: 480px; padding: 34px 28px; }
+      .highlight-card img { width: 330px; bottom: -190px; }
+      .trial { min-height: 830px; padding: 95px 0; }
+      .trial-steps { grid-template-columns: 1fr; text-align: center; }
+      .trial-step { padding: 19px; }
+      .trial-step b { margin-top: 8px; }
+      .footer-inner { flex-wrap: wrap; }
+      .footer-brand { width: 100%; }
+    }
+
+    @media (max-width: 520px) {
+      .nav { height: 60px; }
+      .nav-inner { gap: 10px; }
+      .brand { gap: 8px; }
+      .brand-name { font-size: 15px; letter-spacing: .06em; }
+      .nav-cta { padding: 0 12px; font-size: 11px; }
+      .hero { min-height: 930px; padding-top: 62px; }
+      .color-bridge { min-height: 100px; }
+      .hero .eyebrow { margin-bottom: 25px; }
+      .hero .display { font-size: 50px; line-height: 1.01; letter-spacing: -.065em; }
+      .hero .lead { margin-top: 30px; font-size: 18px; }
+      .hero-actions .button { width: 100%; }
+      .hero-visual { height: 470px; margin-top: 42px; }
+      .hero-device { width: 260px; }
+      .float-card { width: 155px; padding: 13px; border-radius: 15px; }
+      .float-card i { margin-bottom: 7px; font-size: 8px; }
+      .float-card b { font-size: 16px; }
+      .float-card span { margin-top: 6px; font-size: 10px; }
+      .float-card.left { left: -28px; top: 220px; transform: translate(82px, 18px) scale(.8) rotate(-1deg); }
+      .float-card.right { right: -30px; top: 300px; transform: translate(-82px, 18px) scale(.8) rotate(1deg); }
+      .section-title { font-size: 43px; }
+      .section-desc { margin-top: 22px; font-size: 17px; }
+      .mode-label { align-items: center; }
+      .mode-label h3 { font-size: 31px; }
+      .badge { font-size: 11px; padding: 8px 10px; }
+      .screen { height: 650px; border-radius: 30px; }
+      .screen img { border-radius: 22px; }
+      .metric { padding: 18px 8px; }
+      .metric b { font-size: 25px; }
+      .paper-device { padding: 8px; border-radius: 25px; }
+      .paper-device img { border-radius: 18px; }
+      .custom-label { top: 25px; left: 25px; font-size: 12px; }
+      .highlight-card { min-height: 430px; }
+      .trial h2 { font-size: 55px; }
+      .footer-inner { gap: 15px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+      .float-card,
+      .float-card i,
+      .float-card b,
+      .float-card span { opacity: 1; filter: none; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <nav class="nav" aria-label="주요 메뉴">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="COACHFOLIO 처음으로">
+        <span class="brand-mark">CF</span>
+        <span class="brand-name">COACHFOLIO</span>
+      </a>
+      <div class="nav-links">
+        <a href="#record">레슨 기록</a>
+        <a href="#analysis">수행 분석</a>
+        <a href="#report">회원 리포트</a>
+        <a href="https://ig.me/m/Mingky.mt" target="_blank" rel="noopener noreferrer">문의</a>
+      </div>
+      <a class="nav-cta" href="./app/?signup=1">첫 달 무료 시작</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-copy reveal">
+        <div class="eyebrow">Private coaching system</div>
+        <h1 class="display">수업은 흐르고,<br><span class="gradient-text">기록은 남습니다.</span></h1>
+        <p class="lead">회원 관리부터 당일 레슨 기록, 수행능력 분석과 회원 리포트까지. 트레이너의 수업을 하나의 시스템으로 연결하세요.</p>
+        <div class="hero-actions">
+          <a class="button" href="./app/?signup=1">첫 한 달 무료로 시작</a>
+          <a class="button secondary" href="#record">기능 살펴보기</a>
+        </div>
+        <div class="trial-mini">가입 즉시 30일 무료 · 이메일 계정 하나로 바로 시작</div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="float-card left"><i>LESS ADMIN</i><b>회원 30명까지</b><span>회원 현황과 수업 기록을 한곳에서 관리</span></div>
+        <div class="hero-device"><img src="assets/home.png" alt="COACHFOLIO 회원 관리 홈 실제 화면" /></div>
+        <div class="float-card right"><i>MORE COACHING</i><b>기록이 인사이트로</b><span>쌓인 수행 데이터를 자동으로 분석</span></div>
+      </div>
+    </section>
+
+    <section class="section modes" id="record">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <div class="eyebrow">Two recording modes</div>
+          <h2 class="section-title">수업 흐름은 끊지 말고,<br><span class="gradient-text">기록은 그 자리에서.</span></h2>
+          <p class="section-desc">상황에 따라 빠른 기록과 전체 기록을 선택하세요. 짧은 세트 사이에도, 꼼꼼한 수업 정리에도 맞습니다.</p>
+        </header>
+
+        <div class="mode-grid">
+          <article class="mode-card reveal">
+            <div class="mode-label"><div><small>01 · QUICK MODE</small><h3>빠른 기록</h3></div><span class="badge filled">5초 안에 입력</span></div>
+            <div class="screen"><img src="assets/quick.png" alt="COACHFOLIO 빠른 기록 실제 화면" /></div>
+            <p class="mode-note">중량과 횟수, RPE를 큰 버튼으로 바로 입력합니다. 세트 사이의 짧은 시간에도 수업 리듬을 지킬 수 있습니다.</p>
+          </article>
+          <article class="mode-card reveal">
+            <div class="mode-label"><div><small>02 · FULL MODE</small><h3>전체 기록</h3></div><span class="badge">꼼꼼하게 기록</span></div>
+            <div class="screen"><img src="assets/full.png" alt="운동 부위와 이전 기록, 세트별 중량·횟수·RPE가 표시된 COACHFOLIO 전체 기록 실제 화면" /></div>
+            <p class="mode-note">오늘의 컨디션, 운동 부위, 이전 수행과 세트별 기록을 한 화면에서 확인하고 작성합니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="color-bridge bridge-dark-deep" aria-hidden="true"></div>
+
+    <section class="section analysis" id="analysis">
+      <div class="wrap analysis-layout">
+        <div class="analysis-copy reveal">
+          <div class="eyebrow">Performance intelligence</div>
+          <h2 class="section-title">쌓인 기록을,<br><span class="gradient-text">성장의 근거로.</span></h2>
+          <p class="section-desc">복잡한 계산 없이 회원의 수행 변화를 바로 확인하세요.</p>
+          <div class="metric-row">
+            <div class="metric"><b>1RM</b><span>운동별 추정 근력</span></div>
+            <div class="metric"><b>RPE</b><span>피로도와 강도 분석</span></div>
+            <div class="metric"><b>92.31%</b><span>세트 유지율</span></div>
+            <div class="metric"><b>PR</b><span>신기록 자동 판별</span></div>
+          </div>
+        </div>
+        <div class="analysis-screen reveal"><img src="assets/analysis.png" alt="COACHFOLIO 수행능력 분석 실제 화면" /></div>
+      </div>
+    </section>
+
+    <div class="color-bridge bridge-dark-paper" aria-hidden="true"></div>
+
+    <section class="section report" id="report">
+      <div class="wrap report-layout">
+        <div class="reveal">
+          <div class="eyebrow">Member session report</div>
+          <h2 class="section-title">오늘의 수업이,<br>보여줄 결과가 됩니다.</h2>
+          <p class="section-desc">운동 수행과 성장 요약, 코치의 한마디를 한 장의 회원 리포트로 전달하세요.</p>
+          <div class="report-list">
+            <div class="report-item"><i>01</i><div><b>성장 요약</b><span>신기록과 수행 변화를 자동 정리</span></div></div>
+            <div class="report-item"><i>02</i><div><b>운동별 기록</b><span>중량·횟수·RPE를 한눈에</span></div></div>
+            <div class="report-item"><i>03</i><div><b>센터 브랜딩</b><span>센터 상호명으로 리포트 맞춤 설정</span></div></div>
+          </div>
+        </div>
+        <div class="paper-device reveal">
+          <img src="assets/report.png" alt="COACHFOLIO 실제 회원 세션 리포트" />
+          <div class="custom-label">센터 상호명 입력 가능</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="color-bridge bridge-paper-light" aria-hidden="true"></div>
+
+    <section class="section highlights" id="highlights">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <div class="eyebrow">Designed for trainers</div>
+          <h2 class="section-title">트레이너에게 필요한 것만,<br>더 빠르고 선명하게.</h2>
+        </header>
+        <div class="highlight-grid">
+          <article class="highlight-card reveal">
+            <h3>기록부터 분석까지<br>하나의 흐름.</h3>
+            <p>회원 관리, 레슨 기록, 수행 분석, 리포트를 오가며 수업의 맥락을 놓치지 않습니다.</p>
+            <img src="assets/social-03.png" alt="COACHFOLIO 수행 분석 홍보 이미지" />
+          </article>
+          <article class="highlight-card small reveal">
+            <h3>처음 한 달은<br>무료.</h3>
+            <p>회원가입 후 바로 실제 수업에 적용해보고 결정하세요.</p>
+            <div class="big-number">30</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="color-bridge bridge-light-dark" aria-hidden="true"></div>
+
+    <section class="trial" id="trial">
+      <div class="trial-inner reveal">
+        <div class="trial-kicker">START YOUR FIRST 30 DAYS</div>
+        <h2>첫 한 달,<br><span>직접 써보세요.</span></h2>
+        <p>복잡한 상담이나 설치 없이 이메일로 가입하고 바로 시작합니다. 실제 수업에서 충분히 사용해본 뒤 계속 이용할지 결정하세요.</p>
+        <div class="trial-steps">
+          <div class="trial-step"><i>01</i><b>계정 만들기</b><span>이메일과 비밀번호로 간단하게 가입</span></div>
+          <div class="trial-step"><i>02</i><b>이메일 확인</b><span>인증 링크를 눌러 계정 활성화</span></div>
+          <div class="trial-step"><i>03</i><b>바로 사용</b><span>30일 무료 이용권이 자동으로 시작</span></div>
+        </div>
+        <div class="trial-actions">
+          <a class="button" href="./app/?signup=1">회원가입하고 무료 시작</a>
+          <a class="button secondary" href="https://ig.me/m/Mingky.mt" target="_blank" rel="noopener noreferrer">Instagram DM 보내기</a>
+        </div>
+        <div class="fine">첫 가입 계정 기준 30일 · 체험 종료 후 이용권 안내 · Instagram @Mingky.mt</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <div class="footer-brand">COACHFOLIO</div>
+      <a href="./app/?signup=1">회원가입</a>
+      <a href="https://www.instagram.com/Mingky.mt/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <span>© 2026 COACHFOLIO</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.querySelector('.nav');
+    const progress = document.querySelector('.scroll-progress');
+    const updateScroll = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const value = max > 0 ? scrollY / max : 0;
+      progress.style.transform = `scaleX(${Math.max(0, Math.min(1, value))})`;
+      nav.classList.toggle('scrolled', scrollY > 12);
+    };
+    updateScroll();
+    addEventListener('scroll', updateScroll, { passive: true });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
+
+    const heroVisual = document.querySelector('.hero-visual');
+    const wingObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('wings-open');
+        wingObserver.unobserve(entry.target);
+      });
+    }, { threshold: .35, rootMargin: '0px 0px -18% 0px' });
+    wingObserver.observe(heroVisual);
+  </script>
+</body>
+</html>
