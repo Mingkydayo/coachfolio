@@ -459,20 +459,69 @@
       .brand { gap: 8px; }
       .brand-name { font-size: 15px; letter-spacing: .06em; }
       .nav-cta { padding: 0 12px; font-size: 11px; }
-      .hero { min-height: 930px; padding-top: 62px; }
+      .hero { min-height: 0; padding: 62px 0 96px; }
       .color-bridge { min-height: 100px; }
       .hero .eyebrow { margin-bottom: 25px; }
       .hero .display { font-size: 50px; line-height: 1.01; letter-spacing: -.065em; }
       .hero .lead { margin-top: 30px; font-size: 18px; }
       .hero-actions .button { width: 100%; }
-      .hero-visual { height: 470px; margin-top: 42px; }
-      .hero-device { width: 260px; }
-      .float-card { width: 155px; padding: 13px; border-radius: 15px; }
-      .float-card i { margin-bottom: 7px; font-size: 8px; }
-      .float-card b { font-size: 16px; }
-      .float-card span { margin-top: 6px; font-size: 10px; }
-      .float-card.left { left: -28px; top: 220px; transform: translate(82px, 18px) scale(.8) rotate(-1deg); }
-      .float-card.right { right: -30px; top: 300px; transform: translate(-82px, 18px) scale(.8) rotate(1deg); }
+      .trial-mini { max-width: 305px; font-size: 12px; line-height: 1.55; overflow-wrap: normal; }
+      .hero-visual {
+        width: min(calc(100% - 32px), 420px);
+        height: auto;
+        margin-top: 48px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+        perspective: none;
+      }
+      .hero-device {
+        position: relative;
+        grid-row: 1;
+        width: min(310px, calc(100vw - 32px));
+        left: auto;
+        top: auto;
+        justify-self: center;
+        transform: rotateX(2deg);
+      }
+      .float-card {
+        position: relative;
+        width: calc(100% - 22px);
+        padding: 19px 20px;
+        border-radius: 18px;
+        backdrop-filter: blur(14px);
+      }
+      .float-card::after { display: none; }
+      .float-card i { margin-bottom: 9px; font-size: 9px; }
+      .float-card b { font-size: 21px; }
+      .float-card span { margin-top: 7px; font-size: 12px; }
+      .float-card.left {
+        grid-row: 2;
+        left: auto;
+        right: auto;
+        top: auto;
+        justify-self: start;
+        transform: translateX(-28px) scale(.97);
+        transform-origin: left center;
+      }
+      .float-card.right {
+        grid-row: 3;
+        left: auto;
+        right: auto;
+        top: auto;
+        justify-self: end;
+        transform: translateX(28px) scale(.97);
+        transform-origin: right center;
+      }
+      .hero-visual.wings-open .float-card.left,
+      .hero-visual.wings-open .float-card.right { transform: none; }
+      .float-card.mobile-open { opacity: 1; filter: blur(0); transform: none; }
+      .float-card.mobile-open i,
+      .float-card.mobile-open b,
+      .float-card.mobile-open span { opacity: 1; transform: none; }
+      .float-card.mobile-open i { transition-delay: .08s; }
+      .float-card.mobile-open b { transition-delay: .16s; }
+      .float-card.mobile-open span { transition-delay: .24s; }
       .section-title { font-size: 43px; }
       .section-desc { margin-top: 22px; font-size: 17px; }
       .mode-label { align-items: center; }
@@ -679,14 +728,25 @@
     document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
 
     const heroVisual = document.querySelector('.hero-visual');
-    const wingObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('wings-open');
-        wingObserver.unobserve(entry.target);
-      });
-    }, { threshold: .35, rootMargin: '0px 0px -18% 0px' });
-    wingObserver.observe(heroVisual);
+    if (matchMedia('(max-width: 520px)').matches) {
+      const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('mobile-open');
+          cardObserver.unobserve(entry.target);
+        });
+      }, { threshold: .28, rootMargin: '0px 0px -8% 0px' });
+      heroVisual.querySelectorAll('.float-card').forEach((card) => cardObserver.observe(card));
+    } else {
+      const wingObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('wings-open');
+          wingObserver.unobserve(entry.target);
+        });
+      }, { threshold: .35, rootMargin: '0px 0px -18% 0px' });
+      wingObserver.observe(heroVisual);
+    }
   </script>
 </body>
 </html>
